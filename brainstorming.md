@@ -52,7 +52,14 @@ const [minTemp, setMinTemp] = useState<number>(20)
 
 const tempPercentage = Math.max(0, Math.min(100, ((temperature - minTemp) / (maxTemp - minTemp)) * 100))
 
-The second feature or section that I added is a 'System status' section. 
+The second feature or section that I added is a 'System status' section. This section was originally going to be the temperature history section but I felt like I wanted to add more visual feedback so I added how many data points are in the connection list (stops at a max of 50 data points). The Update Rate is just a fixed value but I thought it would be cool to see the speed of the system as well as the connection status. I utilise a useEffect() hook to add the vehicleData to a history array that I call in the System Status card to display a list of temperature's history. 
+
+The third feature I added is the temperature statistics. This is just mainly the current statistic, maximum, minimum and average. I added this so that the user could see when the battery temperature peaks and drops. This was fairly simple to make as it was just another card section where the card labels for current temperature was calculated by using the Temperature passed to the frontend, the max and min was calculated by seeing if the max value has changed in the history array and the minimum value as well. The average was also calculated using the history array. I styled each label with a nice border and colourful text to add to the visuals. 
+
+The last feature I added was the Battery Health & Safety card. This essentially was just another bar that showed a percentage of the Battery Health if it was exceeding the safe operational limit or dropping under it. I just used the same logic aas the temperature scale but visually added the temperature perecentage as a visual with the 20-80 degrees as a start and end point on the bar. For the Safety Alerts I had to alter app.ts and servet.ts to implement sending the error message from my checkBatterySafety() funciton if an alert message was returned, I used the same logic you guys implemented to send the JSON data to the frontend. In the frontend I made a useStatus for the Safety Alerts and then assigned the messages that would contain the alert messages if it didnt then the useStatus for setting alert messages would not be called. I then just added the alerts in a scrollable list where the most recent alert appears at the top so the user does not have to scroll all the way to the bottom to see the most recent alert. Only 20 active alerts can be seen at a time. 
+
+Honorable mention is that I tried to install recharts to make a line graph to visually track the increase and decrease of the Vehicle's temperature. However for some reason the installation never worked even when I ran 'docker compose up --build'. Was running low on time though so I just made do with the statistics section. 
+
 
 
 ## Cloud
