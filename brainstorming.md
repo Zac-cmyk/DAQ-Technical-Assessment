@@ -63,3 +63,15 @@ Honorable mention is that I tried to install recharts to make a line graph to vi
 
 
 ## Cloud
+
+This section required me to propose a change or an addition that would allow data (from the proposed weather system) to be integrated into the Redback CLoud System. DAQ uses Amazon Web Services (AWS) to deploy and run their systems, this is a service that I am very unfamiliar with so the first stages of this was a lot of self research into AWS. The Cloud Architectural Diagram helped a lot as a reference to see the process going on in the system. 
+
+I started by making the PDF document which will contain the diagram and how to implement the system. Reasoning for the implementation can be found in the PDF document. 
+
+For the diagram, I started off by researching a good starting point learning about AWS IoT or just mainly ingestion services (entry points where external data firsts enters the cloud systerm). I learn that they are important for security, scalability, protocol handling and reliability. Mainly for authenticating data sources and ensuring no data is lost. Apparently AWS IoT Core acts as a secure ingestion layer that the weather system can pass data to so I will use AWS Iot Core as an ingestion layer.
+
+The next part of the system to add according to my reseach was a storage pipeline to store data in the cloud after passing data into the cloud system for authentication. 
+
+I settled on using an IoT -> lambda -> redis storage path since Lambda is a serverless compute function that reacts to events. This means that when the weather station sendsdata -> IoT (authenticates) -> triggers lambda function, lambda will then transopfrm the data and then forward it to the Redis. I choose redis as it will act as the real-time data layer recieving constant weather updates from the weather system. By pushing weather data to the Redis channel, the frontend dashboard can show both car and weather data in realtime. However I realised for long-term storage the data would have to be transferred out of redis to a different storage. To store the historical logs and cold data the history of the weather system will be relayed into the S3 database. So realtime data is shown in the Redis Channel and then the S3 database will store the historical logs. After that you can even add DynamoDB for structured queries. 
+
+That mainly setups the cloud arhcitecture system for the Weather System. The rest of the documentation can be found on the PDF. I did some more research to justify my consideration for the use of terraform and docker in the implementation for the weather system. 
